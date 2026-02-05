@@ -175,7 +175,7 @@ jobs:
           - ✳️ **软路由型号**: ${{ github.event.inputs.profile }}
           - 🏠 **后台地址**: ${{ github.event.inputs.custom_router_ip }}
           - 👤 **用户名**: root
-          - 🔑 **密码**: 无
+          - 🔑 **密码**: password
           EOF
 
           if [ "${{ github.event.inputs.include_docker }}" == "yes" ]; then
@@ -188,8 +188,8 @@ jobs:
       - name: Upload ImmortWrt as release assets
         uses: softprops/action-gh-release@v2.2.1
         with:
-          tag_name: Autobuild
-          name: ImmortWrt-Rockchip
+          tag_name: Autobuild-Rockchip-${{ github.event.inputs.profile }}-${{ github.run_id }}
+          name: ImmortalWrt-Rockchip-${{ github.event.inputs.profile }}
           body_path: ${{ github.workspace }}/router-info.md
           files: |
             ${{ github.workspace }}/bin/targets/rockchip/armv8/*.img.gz
