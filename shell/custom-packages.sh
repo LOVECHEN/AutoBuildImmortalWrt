@@ -48,3 +48,9 @@
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES easytier luci-app-easytier"
 # 统一文件共享
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES webdav2 luci-app-unishare"
+
+# ============= 自定义添加 ================
+# FRP 内网穿透
+CUSTOM_PACKAGES="$CUSTOM_PACKAGES frpc luci-app-frpc luci-i18n-frpc-zh-cn"
+# Cloudflare Tunnel
+CUSTOM_PACKAGES="$CUSTOM_PACKAGES cloudflared luci-app-cloudflared"
