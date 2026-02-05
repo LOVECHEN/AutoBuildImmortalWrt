@@ -104,7 +104,7 @@ elif [ "$count" -gt 1 ]; then
     # LAN口设置静态IP
     uci set network.lan.proto='static'
     # 自定义网络配置
-    uci set network.lan.ipaddr='10.10.10.246'
+    uci set network.lan.ipaddr='10.10.10.252'
     uci set network.lan.netmask='255.255.240.0'
     uci set network.lan.gateway='10.10.10.251'
     uci set network.lan.dns='10.10.10.251 223.5.5.5 114.114.114.114'
