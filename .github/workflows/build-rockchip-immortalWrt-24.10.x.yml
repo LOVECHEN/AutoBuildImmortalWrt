@@ -111,6 +111,10 @@ jobs:
 
       - name: Set executable permissions
         run: chmod +x ${{ github.workspace }}/rockchip/build24.sh
+
+      - name: Set build date
+        id: date
+        run: echo "date=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
       
       - name: Save Custom Router IP into OpenWrt files
         run: |
@@ -188,8 +192,8 @@ jobs:
       - name: Upload ImmortWrt as release assets
         uses: softprops/action-gh-release@v2.2.1
         with:
-          tag_name: Autobuild-Rockchip-${{ github.event.inputs.profile }}-${{ github.run_id }}
-          name: ImmortalWrt-Rockchip-${{ github.event.inputs.profile }}
+          tag_name: ImmortalWrt-${{ github.event.inputs.luci_version }}-${{ steps.date.outputs.date }}
+          name: ImmortalWrt ${{ github.event.inputs.luci_version }} 定制版 - ${{ github.event.inputs.profile }}
           body_path: ${{ github.workspace }}/router-info.md
           files: |
             ${{ github.workspace }}/bin/targets/rockchip/armv8/*.img.gz
