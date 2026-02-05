@@ -4,11 +4,22 @@
 LOGFILE="/etc/config/uci-defaults-log.txt"
 echo "Starting 99-custom.sh at $(date)" >>$LOGFILE
 
-# 设置 root 密码
+# 设置 root 密码 (使用 OpenWrt 兼容方式)
+# 方法1: 使用 echo + passwd (某些版本不支持管道)
+# 方法2: 直接设置加密后的密码哈希
 root_password="password"
 if [ -n "$root_password" ]; then
-    (echo "$root_password"; sleep 1; echo "$root_password") | passwd >/dev/null 2>&1
-    echo "Root password set." >> $LOGFILE
+    # 生成密码哈希并写入 shadow (OpenWrt 标准方式)
+    HASH=$(echo -n "$root_password" | openssl passwd -6 -stdin 2>/dev/null || \
+           echo "$root_password" | md5sum | cut -d' ' -f1)
+    if [ -n "$HASH" ]; then
+        sed -i "s|^root:[^:]*:|root:$HASH:|" /etc/shadow
+        echo "Root password set via shadow." >> $LOGFILE
+    else
+        # 备用方案: 使用 passwd 命令
+        echo -e "$root_password\n$root_password" | passwd root >/dev/null 2>&1
+        echo "Root password set via passwd." >> $LOGFILE
+    fi
 fi
 
 # 设置默认防火墙规则，方便单网口虚拟机首次访问 WebUI 
