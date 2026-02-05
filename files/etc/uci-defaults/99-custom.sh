@@ -3,6 +3,14 @@
 # Log file for debugging
 LOGFILE="/etc/config/uci-defaults-log.txt"
 echo "Starting 99-custom.sh at $(date)" >>$LOGFILE
+
+# 设置 root 密码
+root_password="password"
+if [ -n "$root_password" ]; then
+    (echo "$root_password"; sleep 1; echo "$root_password") | passwd >/dev/null 2>&1
+    echo "Root password set." >> $LOGFILE
+fi
+
 # 设置默认防火墙规则，方便单网口虚拟机首次访问 WebUI 
 # 因为本项目中 单网口模式是dhcp模式 直接就能上网并且访问web界面 避免新手每次都要修改/etc/config/network中的静态ip
 # 当你刷机运行后 都调整好了 你完全可以在web页面自行关闭 wan口防火墙的入站数据
@@ -95,34 +103,12 @@ elif [ "$count" -gt 1 ]; then
 
     # LAN口设置静态IP
     uci set network.lan.proto='static'
-    # 多网口设备 支持修改为别的管理后台地址 在Github Action 的UI上自行输入即可 
-    uci set network.lan.netmask='255.255.255.0'
-    # 设置路由器管理后台地址
-    IP_VALUE_FILE="/etc/config/custom_router_ip.txt"
-    if [ -f "$IP_VALUE_FILE" ]; then
-        CUSTOM_IP=$(cat "$IP_VALUE_FILE")
-        # 用户在UI上设置的路由器后台管理地址
-        uci set network.lan.ipaddr=$CUSTOM_IP
-        echo "custom router ip is $CUSTOM_IP" >> $LOGFILE
-    else
-        uci set network.lan.ipaddr='192.168.100.1'
-        echo "default router ip is 192.168.100.1" >> $LOGFILE
-    fi
-
-    # PPPoE设置
-    echo "enable_pppoe value: $enable_pppoe" >>$LOGFILE
-    if [ "$enable_pppoe" = "yes" ]; then
-        echo "PPPoE enabled, configuring..." >>$LOGFILE
-        uci set network.wan.proto='pppoe'
-        uci set network.wan.username="$pppoe_account"
-        uci set network.wan.password="$pppoe_password"
-        uci set network.wan.peerdns='1'
-        uci set network.wan.auto='1'
-        uci set network.wan6.proto='none'
-        echo "PPPoE config done." >>$LOGFILE
-    else
-        echo "PPPoE not enabled." >>$LOGFILE
-    fi
+    # 自定义网络配置
+    uci set network.lan.ipaddr='10.10.10.246'
+    uci set network.lan.netmask='255.255.240.0'
+    uci set network.lan.gateway='10.10.10.251'
+    uci set network.lan.dns='10.10.10.251 223.5.5.5 114.114.114.114'
+    echo "Custom LAN config: 10.10.10.246/255.255.240.0 gw:10.10.10.251" >> $LOGFILE
 
     uci commit network
 fi
