@@ -64,7 +64,7 @@ jobs:
 
       - name: Set build date
         id: date
-        run: echo "date=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
+        run: echo "date=$(date +'%Y%m%d%H')" >> $GITHUB_OUTPUT
 
       - name: Save Custom Router IP into OpenWrt files
         run: |
