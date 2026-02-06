@@ -4,10 +4,10 @@
 
 # 配置参数
 root_password="password"
-lan_ip_address="192.168.3.254"
-lan_netmask="255.255.255.0"
-lan_gateway="192.168.3.1"
-lan_dns="192.168.3.1 223.5.5.5 114.114.114.114"
+lan_ip_address="10.10.10.252"
+lan_netmask="255.255.240.0"
+lan_gateway="10.10.10.251"
+lan_dns="10.10.10.251 223.5.5.5 114.114.114.114"
 
 # log potential errors
 exec >/tmp/setup.log 2>&1
