@@ -4,7 +4,7 @@
 
 # 配置参数
 root_password="password"
-lan_ip_address="10.10.10.252"
+lan_ip_address="10.10.10.249"
 lan_netmask="255.255.240.0"
 lan_gateway="10.10.10.251"
 lan_dns="10.10.10.251 223.5.5.5 114.114.114.114"
